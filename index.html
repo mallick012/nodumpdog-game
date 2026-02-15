@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🐶 NODUMP DOG Game</title>
+<style>
+  body { font-family: Arial; text-align: center; background: #111; color: white; margin-top:50px; }
+  h1 { font-size:32px; color: orange; }
+  h3 { font-size:20px; color:#eee; }
+  button { padding:15px 25px; font-size:18px; margin:10px; border:none; border-radius:10px; cursor:pointer; transition:0.2s; }
+  button:hover { transform:scale(1.05); }
+  #earnBtn { background: orange; color:black; }
+  #shareBtn { background: green; color:white; }
+  #inviteBtn { background: blue; color:white; }
+  #points { font-size:24px; margin:20px 0; }
+  #board { list-style:none; padding:0; }
+</style>
+</head>
+<body>
+
+<h1>🐶 NODUMP DOG</h1>
+<h3>Daily Spin & Earn Points</h3>
+
+<p id="points">Points: 0</p>
+
+<button id="earnBtn" onclick="dailySpin()">🎯 Spin Wheel</button>
+<button id="shareBtn" onclick="shareLink()">🔗 Share & Get Bonus</button>
+<button id="inviteBtn" onclick="friendInvite()">🤝 Invite Friend</button>
+
+<div id="leaderboard">
+  <h3>Leaderboard</h3>
+  <ul id="board">
+    <li>You: 0</li>
+  </ul>
+</div>
+
+<script>
+let points = localStorage.getItem('points') ? parseInt(localStorage.getItem('points')) : 0;
+let lastSpin = localStorage.getItem('lastSpin') ? localStorage.getItem('lastSpin') : null;
+document.getElementById('points').innerText = "Points: " + points;
+
+function dailySpin(){
+  let today = new Date().toDateString();
+  if(lastSpin === today){
+    alert("You already spun today! 🔒 Come back tomorrow.");
+    return;
+  }
+  let reward = Math.floor(Math.random()*10)+1;
+  points += reward;
+  localStorage.setItem('points', points);
+  localStorage.setItem('lastSpin', today);
+  document.getElementById('points').innerText = "Points: " + points;
+  alert("You won " + reward + " points! 👀🐶");
+  updateLeaderboard();
+}
+
+function shareLink(){
+  points += 5;
+  localStorage.setItem('points', points);
+  alert("Thanks for sharing! +5 points 🐶");
+  document.getElementById('points').innerText = "Points: " + points;
+  updateLeaderboard();
+}
+
+function friendInvite(){
+  let reward = Math.floor(Math.random()*10)+1;
+  points += reward;
+  localStorage.setItem('points', points);
+  alert("Friend joined! You got " + reward + " extra points! 🤝🐶");
+  document.getElementById('points').innerText = "Points: " + points;
+  updateLeaderboard();
+}
+
+function updateLeaderboard(){
+  let board = document.getElementById('board');
+  board.innerHTML = "<li>You: " + points + "</li>";
+}
+</script>
+
+</body>
+</html>
+
